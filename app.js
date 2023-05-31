@@ -7,8 +7,10 @@ require("express-async-errors");
 
 /* CONNECT TO DB */
 const connectDB = require("./db/connect");
-
 const morgan = require("morgan");
+
+/* ROUTERS */
+const authRouter = require("./routes/authRoutes");
 
 /* MIDDLEWARE */
 const notFoundMiddleware = require("./middleware/not-found");
@@ -21,6 +23,7 @@ app.get("/", (req, res) => {
   res.send("e-commerce");
 });
 
+app.use("/api/v1/auth", authRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
