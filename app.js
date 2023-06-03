@@ -9,17 +9,20 @@ require('express-async-errors');
 const connectDB = require('./db/connect');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
-/* ROUTERS */
+const cors = require('cors');
+
+/* ROUTES */
 const authRouter = require('./routes/authRoutes');
+const userRouter = require('./routes/userRoutes');
 
 /* MIDDLEWARE */
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
-const { sign } = require('jsonwebtoken');
 
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('e-commerce');
@@ -31,6 +34,7 @@ app.get('/api/v1', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', userRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
