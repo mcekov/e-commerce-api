@@ -4,14 +4,13 @@ Under development
 
 ## Tech
 
-- [Nodejs]
+- [Nodejs] - Node.js® is an open-source, cross-platform JavaScript runtime environment.
+
 - [Mongoose] - elegant mongodb object modeling for node.js
 
 ## Usage
 
-This is a [Vite project](https://vitejs.dev/) bootstrapped with create [vite@latest](https://vitejs.dev/guide/).
-
-Install the dependencies and start the server.
+Install the dependencies, configure mongo db and start the server.
 
 ```sh
 cd e-commerce-api
