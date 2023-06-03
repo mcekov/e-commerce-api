@@ -23,6 +23,26 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new CustomError.BadRequestError('Please provide email and password');
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new CustomError.BadRequestError('Invalid credentials');
+  }
+
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    throw new CustomError.BadRequestError('Invalid credentials');
+  }
+
+  const tokenUser = { name: user.name, userId: user.id, role: user.role };
+  attachCookiesToResponse({ res, user: tokenUser });
+  res.status(StatusCodes.CREATED).json({ user: tokenUser });
+
   res.send('login');
 };
 
