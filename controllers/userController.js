@@ -22,11 +22,27 @@ const showCurrentUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  res.send('update user');
+  res.send(req.body);
 };
 
 const updateUserPassword = async (req, res) => {
-  res.send(req.body);
+  const { oldPassword, newPassword } = req.body;
+
+  if (!newPassword || !oldPassword) {
+    throw new CustomError.BadRequestError('Please provide both values');
+  }
+
+  const user = await User.findOne({ _id: req.user.userId });
+  const isPasswordCorrect = await user.comparePassword(oldPassword);
+
+  if (!isPasswordCorrect) {
+    throw new CustomError.UnauthenticatedError('Invalid credentials');
+  }
+
+  user.password = newPassword;
+
+  await user.save();
+  res.status(StatusCodes.OK).json({ message: 'Success! Password updated.' });
 };
 
 module.exports = {
