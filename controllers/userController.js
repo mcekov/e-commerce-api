@@ -4,7 +4,6 @@ const CustomError = require('../errors');
 const { createTokenUser, attachCookiesToResponse } = require('../utils');
 
 const getAllUsers = async (req, res) => {
-  console.log(req.user);
   const users = await User.find({ role: 'user' }).select('-password');
   res.status(StatusCodes.OK).json({ users });
 };
@@ -22,19 +21,20 @@ const showCurrentUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user: req.user });
 };
 
+// Update user with user.save()
 const updateUser = async (req, res) => {
   const { email, name } = req.body;
 
   if (!email || !name) {
     throw new CustomError.BadRequestError('Please provide all values');
   }
-  console.log(req.user);
 
-  const user = await User.findOneAndUpdate(
-    { _id: req.user.userId },
-    { email, name },
-    { new: true, runValidators: true },
-  );
+  const user = await User.findOne({ _id: req.user.userId });
+
+  user.email = email;
+  user.name = name;
+
+  await user.save();
 
   const tokenUser = createTokenUser(user);
   attachCookiesToResponse({ res, user: tokenUser });
@@ -49,7 +49,7 @@ const updateUserPassword = async (req, res) => {
   }
 
   const user = await User.findOne({ _id: req.user.userId });
-  console.log(req.user);
+
   const isPasswordCorrect = await user.comparePassword(oldPassword);
 
   if (!isPasswordCorrect) {
@@ -69,3 +69,23 @@ module.exports = {
   updateUser,
   updateUserPassword,
 };
+
+// Update user with findOneAndUpdate
+/* const updateUser = async (req, res) => {
+  const { email, name } = req.body;
+
+  if (!email || !name) {
+    throw new CustomError.BadRequestError('Please provide all values');
+  }
+  
+
+  const user = await User.findOneAndUpdate(
+    { _id: req.user.userId },
+    { email, name },
+    { new: true, runValidators: true },
+  );
+
+  const tokenUser = createTokenUser(user);
+  attachCookiesToResponse({ res, user: tokenUser });
+  res.status(StatusCodes.OK).json({ user: tokenUser });
+}; */
