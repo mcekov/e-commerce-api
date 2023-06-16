@@ -4,34 +4,36 @@ const bcrypt = require('bcryptjs');
 
 mongoose.set('strictQuery', true);
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Please provide name'],
-    minLength: 3,
-    maxLength: 50,
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: [true, 'Please provide email'],
-    validate: {
-      validator: validator.isEmail,
-      message: 'Please provide a valid email address',
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Please provide name'],
+      minLength: 3,
+      maxLength: 50,
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: [true, 'Please provide email'],
+      validate: {
+        validator: validator.isEmail,
+        message: 'Please provide a valid email address',
+      },
+    },
+    password: {
+      type: String,
+      required: [true, 'Please provide password'],
+      minLength: 6,
+    },
+    role: {
+      type: String,
+      enum: ['admin', 'user'],
+      default: 'user',
     },
   },
-  password: {
-    type: String,
-    required: [true, 'Please provide password'],
-    minLength: 6,
-  },
-  role: {
-    type: String,
-    enum: ['admin', 'user'],
-    default: 'user',
-  },
-  timestamps: true,
-});
+  { timestamps: true },
+);
 
 /* Before save document we hash the password */
 UserSchema.pre('save', async function () {
