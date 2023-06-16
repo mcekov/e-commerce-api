@@ -5,54 +5,65 @@ mongoose.set('strictQuery', true);
 const ProductSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please provide name'],
-    minLength: 3,
-    maxLength: 50,
+    trim: true,
+    required: [true, 'Please provide a product name'],
+    maxLength: [100, 'Name can not be more than 100 characters'],
   },
   price: {
     type: Number,
-    required: [true, 'Please provide price'],
+    required: [true, 'Please provide product price'],
+    default: 0,
   },
   description: {
     type: String,
-    required: [true, 'Please provide description'],
-    minLength: 10,
-    maxLength: 150,
+    required: [true, 'Please provide product description'],
+    maxLength: [1000, 'Description can not be more than 1000 characters'],
   },
   image: {
     type: String,
     required: [true, 'Please provide image'],
+    default: '/uploads/example.jpeg',
   },
   category: {
     type: String,
-    required: [true, 'Please provide category'],
+    required: [true, 'Please provide product category'],
+    enum: ['office', 'kitchen', 'bedroom'],
   },
   company: {
     type: String,
     required: [true, 'Please provide company'],
+    enum: {
+      values: ['ikea', 'liddy', 'marcos'],
+      message: '{VALUE} is not supported',
+    },
   },
   colors: {
-    type: Array,
-    required: [true, 'Please provide colors'],
+    type: String,
+    required: true,
   },
   featured: {
-    type: String,
+    type: Boolean,
+    default: false,
   },
   freeShipping: {
     type: Boolean,
+    default: false,
   },
   inventory: {
     type: Number,
+    required: true,
+    default: 15,
   },
   averageRating: {
     type: Number,
+    default: 0,
   },
   user: {
-    type: String,
-    required: [true, 'Please provide user id'],
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    required: true,
   },
+  timestamps: true,
 });
-
-UserSchema.set('timestamps', true);
 
 module.exports = mongoose.model('Product', ProductSchema);
