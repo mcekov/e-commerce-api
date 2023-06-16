@@ -9,8 +9,17 @@ const {
   deleteProduct,
   uploadImage,
   getAllProducts,
-} = require('../controllers/userController');
+  getSingleProduct,
+} = require('../controllers/productController');
 
-router.route('/allProducts', getAllProducts);
+router
+  .route('/')
+  .post([authenticateUser, authorizePermissions('admin')], createProduct)
+  .get(getAllProducts);
+router
+  .route('/:id')
+  .get(getSingleProduct)
+  .patch([authenticateUser, authorizePermissions('admin')], updateProduct)
+  .delete([authenticateUser, authorizePermissions('admin')], deleteProduct);
 
 module.exports = router;
