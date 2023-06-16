@@ -1,5 +1,12 @@
+const Product = require('../models/Product');
+const { CustomAPIError } = require('../errors');
+const { StatusCodes } = require('http-status-codes');
+
 const createProduct = async (req, res) => {
-  res.send('create product');
+  req.body.user = req.user.userId;
+
+  const product = await Product.create(req.body);
+  res.status(StatusCodes.CREATED).json({ product });
 };
 
 const updateProduct = async (req, res) => {
@@ -11,7 +18,7 @@ const deleteProduct = async (req, res) => {
 };
 
 const uploadImage = async (req, res) => {
-  res.send('upload product');
+  res.send('upload image product');
 };
 
 const getAllProducts = async (req, res) => {
@@ -19,7 +26,7 @@ const getAllProducts = async (req, res) => {
 };
 
 const getSingleProduct = async (req, res) => {
-  res.send('get single products');
+  res.status(StatusCodes.OK).send(req.body);
 };
 
 module.exports = {
