@@ -16,7 +16,6 @@ const getSingleUser = async (req, res) => {
   }
 
   checkPermissions(req.user, user._id);
-
   res.status(StatusCodes.OK).json({ user });
 };
 

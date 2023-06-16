@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/v1', (req, res) => {
-  console.log(req.signedCookies);
+  // console.log(req.signedCookies);
   res.send('e-commerce');
 });
 

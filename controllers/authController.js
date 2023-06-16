@@ -39,7 +39,6 @@ const login = async (req, res) => {
   }
 
   const tokenUser = createTokenUser(user);
-  console.log('login: ', user);
   attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({ user: tokenUser });
 };
