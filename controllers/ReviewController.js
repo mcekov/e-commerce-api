@@ -1,8 +1,10 @@
 const Review = require('../models/Review');
 const Product = require('../models/Product');
 const { StatusCodes } = require('http-status-codes');
-const CustomError = require('../errors');
+const CustomApiError = require('../errors');
 const { checkPermissions } = require('../utils');
+
+const { ObjectId } = require('mongodb');
 
 const createReview = async (req, res) => {
   const { product: productId } = req.body;
@@ -31,13 +33,18 @@ const getAllReviews = async (req, res) => {
 
 const getSingleReview = async (req, res) => {
   const { id: reviewId } = req.params;
+  let newID = reviewId.toString();
 
-  const review = await Review.findOne({ _id: reviewId });
-
+  /*  try {
+    const review = await Review.findOne({ _id: _id });
+    res.status(StatusCodes.OK).json({ review });
+  } catch (error) {
+    throw new CustomApiError.NotFoundError(`No review with id ${reviewId}`);
+  } */
+  const review = await Review.findOne({ _id: newID });
   if (!review) {
-    throw new CustomError.NotFoundError(`There is no review with id: ${reviewId}`);
+    throw new CustomApiError.NotFoundError(`No review with id ${reviewId}`);
   }
-
   res.status(StatusCodes.OK).json({ review });
 };
 
@@ -46,7 +53,17 @@ const updateReview = async (req, res) => {
 };
 
 const deleteReview = async (req, res) => {
-  res.send('deleteReview');
+  const { id: reviewId } = req.params;
+
+  const review = await Review.findOne({ _id: reviewId });
+
+  if (!review) {
+    throw new CustomError.NotFoundError(`There is no review with id: ${reviewId}`);
+  }
+
+  checkPermissions(req.user, review.user);
+  await review.remove();
+  res.status(StatusCodes.OK).json({ msg: 'Success! Review removed' });
 };
 
 module.exports = {

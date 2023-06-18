@@ -4,30 +4,30 @@ mongoose.set('strictQuery', true);
 
 const ReviewSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      trim: true,
-      required: [true, 'Please provide review title'],
-      maxLength: [100, 'Title can not be more than 100 characters'],
-    },
     rating: {
       type: Number,
       min: 1,
       max: 5,
       required: [true, 'Please provide rating'],
     },
+    title: {
+      type: String,
+      trim: true,
+      required: [true, 'Please provide review title'],
+      maxlength: 100,
+    },
     comment: {
       type: String,
-      required: [true, 'Please provide review comment'],
-    },
-    product: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Product',
-      required: [true, 'Please provide product name'],
+      required: [true, 'Please provide review text'],
     },
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
+      required: true,
+    },
+    product: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Product',
       required: true,
     },
   },
