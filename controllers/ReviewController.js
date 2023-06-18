@@ -1,7 +1,7 @@
 const Review = require('../models/Review');
 const Product = require('../models/Product');
 const { StatusCodes } = require('http-status-codes');
-const CustomApiError = require('../errors');
+const CustomError = require('../errors');
 const { checkPermissions } = require('../utils');
 
 const { ObjectId } = require('mongodb');
@@ -33,23 +33,34 @@ const getAllReviews = async (req, res) => {
 
 const getSingleReview = async (req, res) => {
   const { id: reviewId } = req.params;
-  let newID = reviewId.toString();
 
-  /*  try {
-    const review = await Review.findOne({ _id: _id });
-    res.status(StatusCodes.OK).json({ review });
-  } catch (error) {
-    throw new CustomApiError.NotFoundError(`No review with id ${reviewId}`);
-  } */
-  const review = await Review.findOne({ _id: newID });
+  const review = await Review.findOne({ _id: reviewId });
+  console.log(review);
+
   if (!review) {
-    throw new CustomApiError.NotFoundError(`No review with id ${reviewId}`);
+    throw new CustomError.NotFoundError(`No review with id ${reviewId}`);
   }
   res.status(StatusCodes.OK).json({ review });
 };
 
 const updateReview = async (req, res) => {
-  res.send('updateReview');
+  const { id: reviewId } = req.params;
+  const { rating, title, comment } = req.body;
+
+  const review = await Review.findOne({ _id: reviewId });
+
+  if (!review) {
+    throw new CustomError.NotFoundError(`There is no review with id: ${reviewId}`);
+  }
+
+  checkPermissions(req.user, review.user);
+
+  review.rating = rating;
+  review.title = title;
+  review.comment = comment;
+
+  await review.save();
+  res.status(StatusCodes.OK).json({ review });
 };
 
 const deleteReview = async (req, res) => {
