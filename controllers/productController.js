@@ -35,7 +35,7 @@ const deleteProduct = async (req, res) => {
   }
 
   await product.remove();
-  res.status(StatusCodes.OK).send({ message: 'Product removed' });
+  res.status(StatusCodes.OK).send({ message: 'Success! Product removed' });
 };
 
 const uploadImage = async (req, res) => {
