@@ -4,8 +4,6 @@ const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const { checkPermissions } = require('../utils');
 
-const { ObjectId } = require('mongodb');
-
 const createReview = async (req, res) => {
   const { product: productId } = req.body;
   const isValidProduct = await Product.findOne({ productId });
@@ -77,10 +75,19 @@ const deleteReview = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'Success! Review removed' });
 };
 
+/* Alternative to .populate viruals */
+const getSingleProductReviews = async (req, res) => {
+  const { id: productId } = req.params;
+  const reviews = await Review.find({ product: productId });
+
+  res.status(StatusCodes.OK).json({ reviews });
+};
+
 module.exports = {
   createReview,
   getAllReviews,
   getSingleReview,
   updateReview,
   deleteReview,
+  getSingleProductReviews,
 };
