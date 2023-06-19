@@ -41,7 +41,7 @@ ReviewSchema.post('save', async function () {
 });
 
 ReviewSchema.post('remove', async function () {
-  console.log('remove hook called');
+  console.log('post remove hook called');
 });
 
 module.exports = mongoose.model('Review', ReviewSchema);
