@@ -11,9 +11,13 @@ const {
   updateOrder,
 } = require('../controllers/orderController');
 
-router.route('/').get(getAllOrders).post([authenticateUser], createOrder).patch(updateOrder);
-router.route('/:id').get([authenticateUser], getSingleOrder);
+router
+  .route('/')
+  .get([authenticateUser, authorizePermissions('admin')], getAllOrders)
+  .post([authenticateUser], createOrder);
 
-router.route('/:id/user').get(getCurrentUserOrders);
+router.route('/:id').get([authenticateUser], getSingleOrder).patch([authenticateUser], updateOrder);
+
+router.route('/user/:id').get(getCurrentUserOrders);
 
 module.exports = router;
