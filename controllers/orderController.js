@@ -9,7 +9,13 @@ const getAllOrders = async (req, res) => {
   res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 const getSingleOrder = async (req, res) => {
-  res.send('get order');
+  const order = await Order.findOne({ _id: req.params.id });
+
+  if (!order) {
+    throw new CustomError.BadRequestError(`No order with id: ${req.params.id}`);
+  }
+
+  res.status(StatusCodes.OK).json({ order });
 };
 const getCurrentUserOrders = async (req, res) => {
   res.send('get current user orders');
