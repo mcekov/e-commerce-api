@@ -1,6 +1,7 @@
 const { createJWT, isTokenValid, attachCookiesToResponse } = require('./jwt');
 const createTokenUser = require('./createTokenUtils');
 const checkPermissions = require('./checkPermissions');
+const stripe = require('./stripe');
 
 module.exports = {
   createJWT,
@@ -8,4 +9,5 @@ module.exports = {
   createTokenUser,
   checkPermissions,
   attachCookiesToResponse,
+  stripe,
 };
