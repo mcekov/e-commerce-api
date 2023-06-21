@@ -16,8 +16,7 @@ router
   .get([authenticateUser, authorizePermissions('admin')], getAllOrders)
   .post([authenticateUser], createOrder);
 
+router.route('/showAllMyOrders').get([authenticateUser], getCurrentUserOrders);
 router.route('/:id').get([authenticateUser], getSingleOrder).patch([authenticateUser], updateOrder);
-
-router.route('/user/:id').get(getCurrentUserOrders);
 
 module.exports = router;
