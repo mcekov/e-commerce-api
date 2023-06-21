@@ -4,7 +4,9 @@ const { StatusCodes } = require('http-status-codes');
 const Product = require('../models/Product');
 
 const getAllOrders = async (req, res) => {
-  res.send('get all orders');
+  const orders = await Order.find({});
+
+  res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 const getSingleOrder = async (req, res) => {
   res.send('get order');
@@ -71,7 +73,7 @@ const createOrder = async (req, res) => {
     user: req.user.userId,
   });
 
-  res.status(StatusCodes.CREATED).json({ order, clientSecret: order.clientSecret });
+  res.status(StatusCodes.CREATED).json({ order });
 };
 const updateOrder = async (req, res) => {
   res.send('update order');
