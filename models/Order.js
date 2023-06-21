@@ -1,12 +1,16 @@
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true);
 
-const SingleCartItemSchema = mongoose.Schema({
+const SingleOrderItemSchema = mongoose.Schema({
   name: { type: String, required: true },
   image: { type: String, required: true },
   price: { type: Number, required: true },
   amount: { type: Number, required: true },
-  product: { type: mongoose.Schema.ObjectId, ref: 'Product', required: true },
+  product: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Product',
+    required: true,
+  },
 });
 
 const OrderSchema = mongoose.Schema(
@@ -27,7 +31,7 @@ const OrderSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    cartItems: [SingleCartItemSchema],
+    orderItems: [SingleOrderItemSchema],
     status: {
       type: String,
       enum: ['pending', 'failed', 'paid', 'delivered', 'canceled'],
@@ -44,7 +48,6 @@ const OrderSchema = mongoose.Schema(
     },
     paymentIntentId: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true },
