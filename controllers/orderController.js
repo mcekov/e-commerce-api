@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const CustomError = require('../errors');
 const { StatusCodes } = require('http-status-codes');
 const Product = require('../models/Product');
+const { checkPermissions } = require('../utils');
 
 const { fakeStripeAPI } = require('../utils/stripe');
 
@@ -17,10 +18,18 @@ const getSingleOrder = async (req, res) => {
     throw new CustomError.BadRequestError(`No order with id: ${req.params.id}`);
   }
 
+  checkPermissions(req.user, order.user);
+
   res.status(StatusCodes.OK).json({ order });
 };
 const getCurrentUserOrders = async (req, res) => {
-  res.send('get current user orders');
+  const orders = await Order.find({ user: req.user.userId });
+
+  if (!orders) {
+    throw new CustomError.BadRequestError(`No order with id: ${req.params.id}`);
+  }
+
+  res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 const createOrder = async (req, res) => {
   const { items: cartItems, tax, shippingFee } = req.body;
@@ -78,7 +87,21 @@ const createOrder = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ order });
 };
 const updateOrder = async (req, res) => {
-  res.send('update order');
+  const { id: orderId } = req.params;
+  const { paymentIntentId } = req.body;
+
+  const order = await Order.findOne({ _id: orderId });
+  if (!order) {
+    throw new CustomError.BadRequestError(`No order with id: ${req.params.id}`);
+  }
+
+  checkPermissions(req.user, order.user);
+
+  order.paymentIntentId = paymentIntentId;
+  order.status = 'payd';
+  await order.save();
+
+  res.status(StatusCodes.OK).json({ order });
 };
 
 module.exports = { getAllOrders, getSingleOrder, getCurrentUserOrders, createOrder, updateOrder };
