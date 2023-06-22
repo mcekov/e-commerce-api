@@ -98,7 +98,7 @@ const updateOrder = async (req, res) => {
   checkPermissions(req.user, order.user);
 
   order.paymentIntentId = paymentIntentId;
-  order.status = 'payd';
+  order.status = 'paid';
   await order.save();
 
   res.status(StatusCodes.OK).json({ order });
