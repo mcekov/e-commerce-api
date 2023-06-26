@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('express-async-errors');
+const { accessLogStream } = require('./utils/serverLogs');
 
 /* EXPRESS */
 const express = require('express');
