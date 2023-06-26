@@ -38,7 +38,6 @@ app.use(cors());
 app.use(xss());
 app.use(mongoSanitize());
 
-//app.use(morgan('tiny'));
 // setup the logger
 app.use(morgan('combined', { stream: accessLogStream }));
 app.use(express.json());
