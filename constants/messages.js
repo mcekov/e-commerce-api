@@ -20,6 +20,17 @@ const MESSAGES = {
   emptyUserValues: 'Please provide all values',
   invalidCredentials: 'Invalid credentials',
   passwordUpdateSuccess: 'Success! Password updated.',
+  /**** MIDDLEWARE Authentication ****/
+  invalidToken: 'Please Login to continue',
+  authorizeError: 'Unauthorized action.',
+  /**** MIDDLEWARE Error Handler ****/
+  somethingWentWrong: 'Something went wrong try again later',
+  duplicateValue: 'Duplicate value entered for',
+  invalidItem: 'No item found with id',
+  /**** MIDDLEWARE Not Found ****/
+  invalidRoute: 'Route does not exist',
+  /**** MIDDLEWARE Check Permissions ****/
+  unauthorizedAccess: 'Not authorized to access this route',
 };
 
 module.exports = { MESSAGES };

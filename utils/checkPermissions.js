@@ -1,3 +1,4 @@
+const { MESSAGES } = require('../constants/messages');
 const CustomError = require('../errors');
 
 const checkPermissions = (requestUser, resourceUserId) => {
@@ -13,7 +14,7 @@ const checkPermissions = (requestUser, resourceUserId) => {
     return;
   }
 
-  throw new CustomError.UnauthorizedError('Not authorized to access this route');
+  throw new CustomError.UnauthorizedError(MESSAGES.unauthorizedAccess);
 };
 
 module.exports = checkPermissions;

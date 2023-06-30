@@ -1,10 +1,11 @@
 const { StatusCodes } = require('http-status-codes');
+const { MESSAGES } = require('../constants/messages');
 const errorHandlerMiddleware = (err, req, res, next) => {
   console.log(err);
   let customError = {
     // set default
     statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-    message: err.message || 'Something went wrong try again later',
+    message: err.message || MESSAGES.somethingWentWrong,
   };
   if (err.name === 'ValidationError') {
     customError.message = Object.values(err.errors)
@@ -19,7 +20,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     customError.statusCode = 400;
   }
   if (err.name === 'CastError') {
-    customError.message = `No item found with id: ${err.value}`;
+    customError.message = `${MESSAGES.invalidItem}: ${err.value}`;
     customError.statusCode = 404;
   }
 

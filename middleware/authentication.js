@@ -1,3 +1,4 @@
+const { MESSAGES } = require('../constants/messages');
 const CustomError = require('../errors');
 const { isTokenValid } = require('../utils');
 
@@ -5,7 +6,7 @@ const authenticateUser = async (req, res, next) => {
   const token = req.signedCookies.token;
 
   if (!token) {
-    throw new CustomError.UnauthenticatedError('Please Login to continue');
+    throw new CustomError.UnauthenticatedError(MESSAGES.invalidToken);
   }
 
   try {
@@ -13,14 +14,14 @@ const authenticateUser = async (req, res, next) => {
     req.user = { name, userId, role };
     next();
   } catch (error) {
-    throw new CustomError.UnauthenticatedError('Please Login to continue');
+    throw new CustomError.UnauthenticatedError(MESSAGES.invalidToken);
   }
 };
 
 const authorizePermissions = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      throw new CustomError.UnauthorizedError('Unauthorized action.');
+      throw new CustomError.UnauthorizedError(MESSAGES.authorizeError);
     }
     next();
   };
