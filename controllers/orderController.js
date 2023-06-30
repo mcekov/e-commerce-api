@@ -42,7 +42,7 @@ const createOrder = async (req, res) => {
   }
 
   if (!tax || !shippingFee) {
-    throw new CustomError.BadRequestError(MESSAGES.emtyTaxOrShipping);
+    throw new CustomError.BadRequestError(MESSAGES.emptyTaxOrShipping);
   }
 
   for (const item of cartItems) {

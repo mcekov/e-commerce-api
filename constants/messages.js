@@ -7,7 +7,7 @@ const MESSAGES = {
 
   invalidOrder: 'No order with id',
   emptyCart: 'No cart items provided',
-  emtyTaxOrShipping: 'Please provide tax and shipping fee',
+  emptyTaxOrShipping: 'Please provide tax and shipping fee',
 };
 
 module.exports = { MESSAGES };
