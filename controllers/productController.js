@@ -3,6 +3,7 @@ const CustomError = require('../errors');
 const { StatusCodes } = require('http-status-codes');
 
 const path = require('path');
+const { MESSAGES } = require('../constants/messages');
 
 const createProduct = async (req, res) => {
   req.body.user = req.user.userId;
@@ -19,7 +20,7 @@ const updateProduct = async (req, res) => {
   });
 
   if (!product) {
-    throw new CustomError.NotFoundError(`No product with id: ${productId}`);
+    throw new CustomError.NotFoundError(`${MESSAGES.invalidProduct}: ${productId}`);
   }
 
   res.status(StatusCodes.OK).send({ product });
@@ -31,11 +32,11 @@ const deleteProduct = async (req, res) => {
   const product = await Product.findOne({ _id: productId });
 
   if (!product) {
-    throw new CustomError.NotFoundError(`No product with id: ${productId}`);
+    throw new CustomError.NotFoundError(`${MESSAGES.invalidProduct}: ${productId}`);
   }
 
   await product.remove();
-  res.status(StatusCodes.OK).send({ message: 'Success! Product removed' });
+  res.status(StatusCodes.OK).send({ message: MESSAGES.removedProductSuccess });
 };
 
 const uploadImage = async (req, res) => {
@@ -71,7 +72,7 @@ const getSingleProduct = async (req, res) => {
   const product = await Product.findOne({ _id: productId }).populate('reviews');
 
   if (!product) {
-    throw new CustomError.NotFoundError(`No product with id: ${productId}`);
+    throw new CustomError.NotFoundError(`${MESSAGES.invalidProduct}: ${productId}`);
   }
 
   res.status(StatusCodes.OK).send({ product });

@@ -93,7 +93,7 @@ const updateOrder = async (req, res) => {
 
   const order = await Order.findOne({ _id: orderId });
   if (!order) {
-    throw new CustomError.BadRequestError(`${MESSAGES.invalidOrder} ${req.params.id}`);
+    throw new CustomError.BadRequestError(`${MESSAGES.invalidOrder}: ${req.params.id}`);
   }
 
   checkPermissions(req.user, order.user);
