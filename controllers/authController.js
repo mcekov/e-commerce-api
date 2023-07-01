@@ -41,6 +41,10 @@ const verifyEmail = async (req, res) => {
     throw new CustomError.UnauthenticatedError(MESSAGES.verificationFailed);
   }
 
+  if (userWithEmail.verificationToken === '') {
+    throw new CustomError.UnauthenticatedError(MESSAGES.alreadyVerified);
+  }
+
   if (userWithEmail.verificationToken !== verificationToken) {
     throw new CustomError.UnauthenticatedError(MESSAGES.verificationFailed);
   }
