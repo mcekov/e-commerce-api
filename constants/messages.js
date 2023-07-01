@@ -1,5 +1,6 @@
 const MESSAGES = {
   /**** AUTH CONTROLLER ****/
+  accountCreatedSuccess: 'Success! Please check your email to verify account',
   emailExist: 'Email already exists',
   emptyEmailOrPassword: 'Please provide email and password',
   invalidCredentials: 'Invalid credentials',
