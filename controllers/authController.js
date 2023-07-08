@@ -123,4 +123,12 @@ const logout = async (req, res) => {
   res.status(StatusCodes.OK).json({ message: MESSAGES.logoutUserMessage });
 };
 
-module.exports = { register, login, logout, verifyEmail };
+const forgotPassword = (req, res) => {
+  res.status(StatusCodes.OK).json({ message: 'Forgot password' });
+};
+
+const resetPassword = (req, res) => {
+  res.status(StatusCodes.OK).json({ message: 'Reset password' });
+};
+
+module.exports = { register, login, logout, verifyEmail, forgotPassword, resetPassword };
