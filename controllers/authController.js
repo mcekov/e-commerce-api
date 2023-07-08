@@ -88,20 +88,35 @@ const login = async (req, res) => {
 
   let refreshToken = '';
 
+  const existingToken = await Token.findOne({ user: user._id });
+
+  if (existingToken) {
+    const { isValid } = existingToken;
+
+    if (!isValid) {
+      throw new CustomError.BadRequestError(MESSAGES.invalidCredentials);
+    }
+
+    refreshToken = existingToken.refreshToken;
+    attachCookiesToResponse({ res, user: tokenUser, refreshToken });
+    res.status(StatusCodes.OK).json({ user: tokenUser });
+    return;
+  }
+
   refreshToken = crypto.randomBytes(40).toString('hex');
   const userAgent = req.headers['user-agent'];
   const ip = req.ip;
   const userToken = { refreshToken, ip, userAgent, user: user._id };
 
-  const token = await Token.create(userToken);
+  await Token.create(userToken);
 
-  // attachCookiesToResponse({ res, user: tokenUser });
+  attachCookiesToResponse({ res, user: tokenUser, refreshToken });
 
-  res.status(StatusCodes.OK).json({ user: tokenUser, token });
+  res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 const logout = async (req, res) => {
-  res.cookie('token', 'logout', { httpOnly: true, expires: new Date(Date.now()) });
+  res.cookie('token', 'logout', { httpOnly: true, expires: new Date(Date.now() + 1000) });
 
   res.status(StatusCodes.OK).json({ message: MESSAGES.logoutUserMessage });
 };

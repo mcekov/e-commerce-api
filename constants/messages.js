@@ -28,6 +28,7 @@ const MESSAGES = {
   /**** MIDDLEWARE Authentication ****/
   invalidToken: 'Please Login to continue',
   authorizeError: 'Unauthorized action.',
+  authenticationInvalid: 'Authentication invalid',
   /**** MIDDLEWARE Error Handler ****/
   somethingWentWrong: 'Something went wrong try again later',
   duplicateValue: 'Duplicate value entered for',
