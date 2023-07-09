@@ -6,6 +6,8 @@ const stripe = require('./stripe');
 const sendVerificationEmail = require('./sendVerificationEmail');
 const sendResetPasswordEmail = require('./sendResetPasswordEmail');
 
+const createHash = require('../utils/createHash');
+
 module.exports = {
   createJWT,
   isTokenValid,
@@ -15,4 +17,5 @@ module.exports = {
   stripe,
   sendVerificationEmail,
   sendResetPasswordEmail,
+  createHash,
 };

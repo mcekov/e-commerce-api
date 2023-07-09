@@ -7,6 +7,7 @@ const {
   createTokenUser,
   sendVerificationEmail,
   sendResetPasswordEmail,
+  createHash,
 } = require('../utils');
 
 const { MESSAGES } = require('../constants/messages');
@@ -150,7 +151,7 @@ const forgotPassword = async (req, res) => {
     const tenMinutes = 1000 * 60 * 10;
     const passwordTokenExpDate = new Date(Date.now() + tenMinutes);
 
-    user.passwordToken = passwordToken;
+    user.passwordToken = createHash(passwordToken);
     user.passwordTokenExpDate = passwordTokenExpDate;
     await user.save();
   }
@@ -170,7 +171,7 @@ const resetPassword = async (req, res) => {
   if (user) {
     const currentDate = new Date();
 
-    if (user.passwordToken === token && user.passwordTokenExpDate > currentDate) {
+    if (user.passwordToken === createHash(token) && user.passwordTokenExpDate > currentDate) {
       user.password = password;
       user.passwordToken = null;
       user.passwordTokenExpDate = null;
@@ -179,7 +180,7 @@ const resetPassword = async (req, res) => {
     }
   }
 
-  res.status(StatusCodes.OK).json({ message: 'Reset password' });
+  res.status(StatusCodes.OK).json({});
 };
 
 module.exports = { register, login, logout, verifyEmail, forgotPassword, resetPassword };
