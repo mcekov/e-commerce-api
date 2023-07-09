@@ -7,6 +7,7 @@ const MESSAGES = {
   accountCreatedSuccess: 'Success! Please check your email to verify account',
   emailExist: 'Email already exists',
   emptyEmailOrPassword: 'Please provide email and password',
+  invalidEmail: 'Please provide valid email',
   invalidCredentials: 'Invalid credentials',
   logoutUserMessage: 'User logged out',
   /**** ORDER CONTROLLER ****/
@@ -22,7 +23,7 @@ const MESSAGES = {
   removedReviewSuccess: 'Success! Review removed',
   /**** USER CONTROLLER ****/
   invalidUser: 'No user with id',
-  emptyUserValues: 'Please provide all values',
+  emptyValues: 'Please provide all values',
   invalidCredentials: 'Invalid credentials',
   passwordUpdateSuccess: 'Success! Password updated.',
   /**** MIDDLEWARE Authentication ****/

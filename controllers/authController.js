@@ -2,7 +2,12 @@ const User = require('../models/User');
 const Token = require('../models/Token');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
-const { attachCookiesToResponse, createTokenUser, sendVerificationEmail } = require('../utils');
+const {
+  attachCookiesToResponse,
+  createTokenUser,
+  sendVerificationEmail,
+  sendResetPasswordEmail,
+} = require('../utils');
 
 const { MESSAGES } = require('../constants/messages');
 
@@ -123,11 +128,57 @@ const logout = async (req, res) => {
   res.status(StatusCodes.OK).json({ message: MESSAGES.logoutUserMessage });
 };
 
-const forgotPassword = (req, res) => {
-  res.status(StatusCodes.OK).json({ message: 'Forgot password' });
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    throw new CustomError.BadRequestError(MESSAGES.invalidEmail);
+  }
+
+  const user = await User.findOne({ email: email });
+  if (user) {
+    const passwordToken = crypto.randomBytes(70).toString('hex');
+
+    // Send email
+    const origin = 'http://localhost:5173';
+    await sendResetPasswordEmail({
+      name: user.name,
+      email: user.email,
+      token: passwordToken,
+      origin,
+    });
+
+    const tenMinutes = 1000 * 60 * 10;
+    const passwordTokenExpDate = new Date(Date.now() + tenMinutes);
+
+    user.passwordToken = passwordToken;
+    user.passwordTokenExpDate = passwordTokenExpDate;
+    await user.save();
+  }
+
+  res.status(StatusCodes.OK).json({ message: 'Please check your email for reset password link' });
 };
 
-const resetPassword = (req, res) => {
+const resetPassword = async (req, res) => {
+  const { token, email, password } = req.body;
+
+  if (!token || !email || !password) {
+    throw new CustomError.BadRequestError(MESSAGES.emptyValues);
+  }
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    const currentDate = new Date();
+
+    if (user.passwordToken === token && user.passwordTokenExpDate > currentDate) {
+      user.password = password;
+      user.passwordToken = null;
+      user.passwordTokenExpDate = null;
+
+      await user.save();
+    }
+  }
+
   res.status(StatusCodes.OK).json({ message: 'Reset password' });
 };
 

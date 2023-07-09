@@ -4,6 +4,7 @@ const checkPermissions = require('./checkPermissions');
 const stripe = require('./stripe');
 
 const sendVerificationEmail = require('./sendVerificationEmail');
+const sendResetPasswordEmail = require('./sendResetPasswordEmail');
 
 module.exports = {
   createJWT,
@@ -13,4 +14,5 @@ module.exports = {
   attachCookiesToResponse,
   stripe,
   sendVerificationEmail,
+  sendResetPasswordEmail,
 };

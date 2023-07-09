@@ -29,7 +29,7 @@ const updateUser = async (req, res) => {
   const { email, name } = req.body;
 
   if (!email || !name) {
-    throw new CustomError.BadRequestError(MESSAGES.emptyUserValues);
+    throw new CustomError.BadRequestError(MESSAGES.emptyValues);
   }
 
   const user = await User.findOne({ _id: req.user.userId });
@@ -48,7 +48,7 @@ const updateUserPassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
   if (!newPassword || !oldPassword) {
-    throw new CustomError.BadRequestError(MESSAGES.emptyUserValues);
+    throw new CustomError.BadRequestError(MESSAGES.emptyValues);
   }
 
   const user = await User.findOne({ _id: req.user.userId });
